@@ -35,14 +35,14 @@ needs to know where is located the API server and to log in:
 
     import gazu
 
-    gazu.set_host("https://zou-server-url")
+    gazu.set_host("https://zou-server-url/api")
     gazu.log_in("user@yourdomain.com", "password")
 
 Let's finish with an example. Fetch all the open projects:
 
 ::
 
-    projects = gazu.projects.open_projects()
+    projects = gazu.project.all_open_projects()
 
 Then jump to the `documentation <https://gazu.cg-wire.com>`__ to see
 what features are available!
@@ -68,6 +68,16 @@ Sponsors
 |Unit Image Logo|
 |Les Fées Spéciales Logo|
 
+Contributors
+------------
+
+* @BigRoy (Colorbleed)
+* @col-one (Allegorithmic)
+* @flablog (Les Fées Spéciales)
+* @frankrousseau (CGWire) - *maintainer*
+* @g-Lul (TNZPV)
+* @jdrese (HEAJ)
+
 About authors
 -------------
 
@@ -88,7 +98,7 @@ Visit `cg-wire.com <https://cg-wire.com>`__ for more information.
    :target: https://travis-ci.org/cgwire/gazu
 .. |Slackin badge| image:: https://slack.cg-wire.com/badge.svg
    :target: https://slack.cg-wire.com
-.. |CGWire Logo| image:: https://gazu.cg-wire.com/cgwire.png
+.. |CGWire Logo| image:: https://zou.cg-wire.com/cgwire.png
    :target: https://cg-wire.com
 .. |Unit Image Logo| image:: https://www.cg-wire.com/images/logo-unit-image.png
    :target: https://www.unit-image.fr

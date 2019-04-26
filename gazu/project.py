@@ -2,6 +2,7 @@ from . import client
 
 from .sorting import sort_by_name
 from .cache import cache
+from .helpers import normalize_model_parameter
 
 
 @cache
@@ -65,3 +66,50 @@ def new_project(name, production_type="short"):
     if project is None:
         project = client.create("projects", data)
     return project
+
+
+def remove_project(project):
+    """
+    Remove given project from database. (Prior to do that, make sure, there
+    is no asset or shot left).
+
+    Args:
+        project (dict / str): Project to remove.
+    """
+    project = normalize_model_parameter(project)
+    path = "data/projects/%s" % project["id"]
+    return client.delete(path)
+
+
+def update_project(project):
+    """
+    Save given project data into the API. Metadata are fully replaced by the
+    ones set on given project.
+
+    Args:
+        project (dict): The project to update.
+
+    Returns:
+        dict: Updated project.
+    """
+    return client.put("data/projects/%s" % project["id"], project)
+
+
+def update_project_data(project, data={}):
+    """
+    Update the metadata for the provided project. Keys that are not provided
+    are not changed.
+
+    Args:
+        project (dict / ID): The project dict or id to save in database.
+        data (dict): Free field to set metadata of any kind.
+
+    Returns:
+        dict: Updated project.
+    """
+    project = normalize_model_parameter(project)
+    project = get_project(project["id"])
+    if "data" not in project or project["data"] is None:
+        project["data"] = {}
+    project["data"].update(data)
+    update_project(project)

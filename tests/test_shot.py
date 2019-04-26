@@ -164,7 +164,7 @@ class ShotTestCase(unittest.TestCase):
         with requests_mock.mock() as mock:
             mock.get(
                 gazu.client.get_full_url(
-                    "data/shots/all?parent_id=sequence-1&name=Shot01"
+                    "data/shots/all?sequence_id=sequence-1&name=Shot01"
                 ),
                 text=json.dumps([
                     {"name": "Shot01", "project_id": "project-1"}
@@ -210,7 +210,7 @@ class ShotTestCase(unittest.TestCase):
         with requests_mock.mock() as mock:
             mock.get(
                 gazu.client.get_full_url(
-                    "data/sequences?parent_id=episode-1&name=Sequence 01"
+                    "data/sequences?episode_id=episode-1&name=Sequence 01"
                 ),
                 text=json.dumps([])
             )
@@ -232,7 +232,7 @@ class ShotTestCase(unittest.TestCase):
         with requests_mock.mock() as mock:
             mock.get(
                 gazu.client.get_full_url(
-                    "data/shots/all?parent_id=sequence-1&name=Shot 01"
+                    "data/shots/all?sequence_id=sequence-1&name=Shot 01"
                 ),
                 text=json.dumps([])
             )
@@ -267,6 +267,51 @@ class ShotTestCase(unittest.TestCase):
             }
             shot = gazu.shot.update_shot(shot)
             self.assertEqual(shot["id"], "shot-01")
+
+    def test_remove_shot(self):
+        with requests_mock.mock() as mock:
+            mock.delete(
+                gazu.client.get_full_url("data/shots/shot-1"),
+                status_code=204
+            )
+            shot = {
+                "id": "shot-1",
+                "name": "S02"
+            }
+            gazu.shot.remove_shot(shot)
+            mock.delete(
+                gazu.client.get_full_url("data/shots/shot-1?force=true"),
+                status_code=204
+            )
+            shot = {
+                "id": "shot-1",
+                "name": "S02"
+            }
+            gazu.shot.remove_shot(shot, True)
+
+    def test_remove_sequence(self):
+        with requests_mock.mock() as mock:
+            mock = mock.delete(
+                gazu.client.get_full_url("data/entities/sequence-1"),
+                status_code=204
+            )
+            sequence = {
+                "id": "sequence-1",
+                "name": "S02"
+            }
+            gazu.shot.remove_sequence(sequence)
+
+    def test_remove_episode(self):
+        with requests_mock.mock() as mock:
+            mock = mock.delete(
+                gazu.client.get_full_url("data/entities/episode-1"),
+                status_code=204
+            )
+            episode = {
+                "id": "episode-1",
+                "name": "S02"
+            }
+            episode = gazu.shot.remove_episode(episode)
 
     def test_get_asset_instances(self):
         with requests_mock.mock() as mock:
